@@ -1,4 +1,5 @@
 from recbole.utils.case_study import full_sort_topk
+from clikhouse_downloader_converter import data_tranform_to_recbole
 import pickle
 from flask import Flask, request, jsonify
 import torch
@@ -72,6 +73,8 @@ def serve_predictions():
         return jsonify(recommendations)
     except Exception as e:
         return jsonify({"error": str(e)})
+
+data_tranform_to_recbole("interactions_processed_2", "kion_users", "kion_items", "kion")
 
 config, model, dataset, train_data, valid_data, test_data = load_data_and_model(
     model_file='models/SASRec-v0.1.pth'
