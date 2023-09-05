@@ -1,0 +1,2 @@
+# UniversalHack-Model
+Для хакатона 
