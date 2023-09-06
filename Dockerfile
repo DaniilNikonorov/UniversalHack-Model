@@ -12,6 +12,7 @@ RUN pip install -U "ray[default]==2.6.3"
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install pandas
+WORKDIR /app
 # RUN pip install -r ./requirements.txt
 # Запуск нашего приложения при старте контейнера
-CMD python /app/prediction.py
+CMD prediction.py
