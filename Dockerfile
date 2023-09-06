@@ -15,4 +15,4 @@ RUN pip install pandas
 WORKDIR /app
 # RUN pip install -r ./requirements.txt
 # Запуск нашего приложения при старте контейнера
-CMD prediction.py
+CMD /app/prediction.py
