@@ -1,0 +1,43 @@
+name: Continuous delivery
+
+on:
+  workflow_run:
+    workflows: [ "build python" ]
+    types:
+      - completed
+
+env:
+  DOCKER_REGISTRY_REPO: "${{ vars.DOCKER_HUB_REPO }}"
+
+
+jobs:
+  deploy:
+    name: "Deploy to staging"
+    runs-on: ubuntu-latest
+    # needs: test
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          cat >>~/.ssh/config <<END
+          Host PROD
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/id_rsa
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      - name: Refresh images
+        run: ssh PROD 'sudo docker-compose pull'
+
+      - name: Restart compose
+        run: ssh PROD 'sudo docker-compose up --force-recreate --build -d  ${{ env.DOCKER_REGISTRY_REPO }}'
+
+      - name: Prune images
+        run: ssh PROD 'sudo docker image prune -f -a'

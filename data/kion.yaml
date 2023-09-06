@@ -1,0 +1,24 @@
+data_path: /content
+dataset: kion
+
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+TIME_FIELD: timestamp
+
+load_col:
+    inter: [user_id, item_id, rating, timestamp, content_type, title, title_orig, genres, countries,
+      for_kids, age_rating, studios, directors, actors,
+      description, keywords, release_year_cat, age, income, sex, kids_flg]
+
+val_interval:
+    rating: "[0,inf)"
+    timestamp: "[1627603200, inf)"
+
+device: "cuda:0"
+train_neg_sample_args: null
+eval_args:
+  split: { 'LS': 'test_only' }
+  group_by: user
+  order: TO
+
