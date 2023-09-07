@@ -37,7 +37,7 @@ jobs:
         run: ssh PROD 'sudo docker pull ${{ env.DOCKER_REGISTRY_REPO }}:latest'
 
       - name: Restart compose
-        run: ssh PROD 'docker run -d -p 5000:5000 ${{ env.DOCKER_REGISTRY_REPO }}'
+        run: ssh PROD 'docker run -d -p 8000:8000 ${{ env.DOCKER_REGISTRY_REPO }}'
 
       - name: Prune images
         run: ssh PROD 'sudo docker image prune -f -a'
