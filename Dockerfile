@@ -1,24 +1,18 @@
-FROM python:3.8.18-alpine3.18
+# Используйте базовый образ Python
+FROM python:3.9
 
+# Установка переменной окружения для запуска внутри контейнера
+ENV PYTHONUNBUFFERED 1
+
+# Создание директории приложения в контейнере
 WORKDIR /app
 
-# Copy all files from the current directory into the /app directory in the container
-COPY ./ /app
+# Установка зависимостей
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install necessary build dependencies
-RUN apk add --no-cache \
-    g++ \
-    gcc \
-    make \
-    gfortran \
-    musl-dev \
-    python3-dev \
-    openblas-dev
+# Копирование кода приложения в контейнер
+COPY . .
 
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# Define the entry point for the container
-ENTRYPOINT ["python"]
-
-# Specify the default command to run when the container starts
-CMD ["prediction.py"]
+# Запуск FastAPI приложения
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
