@@ -1,19 +1,24 @@
-# Берем нужный базовый образ
-FROM python:3.10.5
-# Копируем все файлы из текущей директории в /app контейнера
-COPY ./ /app
-# RUN if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-COPY requirements.txt .
+FROM python:3.8.18-alpine3.18
 
-# Устанавливаем все зависимости
-RUN python -m pip install --upgrade pip
-RUN pip install ruff pytest
-RUN pip install -U "ray[default]==2.6.3"
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install pandas
 WORKDIR /app
-# RUN pip install -r ./requirements.txt
-# Запуск нашего приложения при старте контейнера
+
+# Copy all files from the current directory into the /app directory in the container
+COPY ./ /app
+
+# Install necessary build dependencies
+RUN apk add --no-cache \
+    g++ \
+    gcc \
+    make \
+    gfortran \
+    musl-dev \
+    python3-dev \
+    openblas-dev
+
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# Define the entry point for the container
 ENTRYPOINT ["python"]
+
+# Specify the default command to run when the container starts
 CMD ["prediction.py"]

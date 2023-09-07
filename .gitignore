@@ -171,8 +171,7 @@ poetry.toml
 .ruff_cache/
 
 .idea 
-content
-classic_model/trained_models
+
 
 
 # LSP config files
