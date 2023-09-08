@@ -1,15 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers.calculation import router as routes
-from .routers.filters import router as filters
+from .routers.endpoints import router as endpoints
 
 app = FastAPI(
-    title="Aeroflot App"
+    title="University Hack"
 )
 
-app.include_router(routes)
-app.include_router(filters)
+app.include_router(endpoints)
 
 # Разрешить все источники (для примера)
 app.add_middleware(
