@@ -8,10 +8,11 @@ user_id = 50
 
 # Create a JSON payload with the user ID
 payload = {'user_id': user_id, 'device_id': 352398080550058, 'items_id': [104821, 107726, 100671]}
-
+payload_item = {"item_ids":[115873, 107726]}
 # Send a POST request to the /predict_user endpoint
 response = requests.post(f'{app_url}/predict_user', json=payload)
 
+print(requests.post(f"{app_url}/item_name", json=payload_item).json())
 # Check if the request was successful
 if response.status_code == 200:
     recommendations = response.json()
