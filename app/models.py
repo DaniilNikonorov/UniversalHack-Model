@@ -44,3 +44,34 @@ class Market(Base):
     __mapper_args__ = {
         "polymorphic_identity": "market",
     }
+
+
+class Items(Base):
+    __tablename__ = 'items_supermarket'
+
+    Column1 = Column('Column1', Integer, primary_key=True)
+    item_id = Column('item_id', Integer)
+    name = Column('name', String)
+
+    __table_args__ = (
+        engines.Memory()
+    )
+
+
+class Points(Base):
+    __tablename__ = 'supermarket_train'
+
+    Column1 = Column('Column1', Integer, primary_key=True)
+    device_id = Column('device_id', Integer)
+    receipt_id = Column('receipt_id', Integer)
+    item_id = Column('item_id', Integer)
+    server_date = Column('server_date', Integer)
+    local_date = Column('local_date', Integer)
+    name = Column('name', Integer)
+    price = Column('price', Integer)
+    quantity = Column('quantity', Integer)
+    my_ckecker = Column('my_ckecker', Integer)
+
+    __table_args__ = (
+        engines.Memory()
+    )
