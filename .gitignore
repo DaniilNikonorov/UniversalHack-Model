@@ -168,6 +168,7 @@ cython_debug/
 poetry.toml
 
 # ruff
+.Ds_store
 .ruff_cache/
 
 .idea 
