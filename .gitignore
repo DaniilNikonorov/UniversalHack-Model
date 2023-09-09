@@ -171,7 +171,7 @@ poetry.toml
 .ruff_cache/
 
 .idea 
-
+.DS_Store
 
 
 # LSP config files
