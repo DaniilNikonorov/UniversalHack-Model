@@ -8,6 +8,7 @@ from app.mlmodel.mainmodel import predict_for_user
 from app.models import Items, Points, Prediction, UserInfo
 from app.mlmodel import mainmodel
 import pandas as pd
+import logging
 
 router = APIRouter(prefix='/api/v1', tags=['our api'])
 
@@ -44,6 +45,7 @@ async def get_market(user_id):
         }}
     except Exception as e:
         print(e)
+        logging.error(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -61,6 +63,7 @@ async def create_market_upload_file(file: Union[UploadFile, None] = None):
 
         except Exception as e:
             print(e)
+            logging.error(e)
             return {'status': 500, 'error': str(e)}
 
         """Сюда добавить передачу данных в модель на дообучение"""
@@ -100,6 +103,7 @@ async def calculate(item: Item):
         }}
     except Exception as e:
         print(e)
+        logging.error(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -115,6 +119,7 @@ async def get_product(product_id):
         return {'status': 200, 'result': check_query.all()}
     except Exception as e:
         print(e)
+        logging.error(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -130,6 +135,7 @@ async def get_product():
         return {'status': 200, 'result': check_query.all()}
     except Exception as e:
         print(e)
+        logging.error(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -145,4 +151,5 @@ async def get_points():
         return {'status': 200, 'result': check_query.all()}
     except Exception as e:
         print(e)
+        logging.error(e)
         return {'status': 500, 'error': str(e)}
