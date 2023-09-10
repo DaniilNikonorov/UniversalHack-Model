@@ -43,6 +43,7 @@ async def get_market(user_id):
             'user': user_id, 'predict': product, 'products': productsWithNames
         }}
     except Exception as e:
+        print(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -59,6 +60,7 @@ async def create_market_upload_file(file: Union[UploadFile, None] = None):
                 result.append(market)
 
         except Exception as e:
+            print(e)
             return {'status': 500, 'error': str(e)}
 
         """Сюда добавить передачу данных в модель на дообучение"""
@@ -90,6 +92,7 @@ async def calculate(item: Item):
 
         return {'status': 200, 'result': check_query.first()}
     except Exception as e:
+        print(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -104,6 +107,7 @@ async def get_product(product_id):
 
         return {'status': 200, 'result': check_query.all()}
     except Exception as e:
+        print(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -118,6 +122,7 @@ async def get_product():
 
         return {'status': 200, 'result': check_query.all()}
     except Exception as e:
+        print(e)
         return {'status': 500, 'error': str(e)}
 
 
@@ -132,4 +137,5 @@ async def get_points():
 
         return {'status': 200, 'result': check_query.all()}
     except Exception as e:
+        print(e)
         return {'status': 500, 'error': str(e)}
