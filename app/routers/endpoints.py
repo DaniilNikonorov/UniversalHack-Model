@@ -52,7 +52,7 @@ async def create_market_upload_file(file: Union[UploadFile, None] = None):
             frame = pd.read_csv(file.file)
             result = []
             for d in frame['device_id']:
-                result.append(get_market(d))
+                result.append()
 
         except Exception as e:
             return {'status': 500, 'error': str(e)}
