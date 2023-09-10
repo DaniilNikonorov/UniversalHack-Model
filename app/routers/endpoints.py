@@ -1,5 +1,8 @@
 from fastapi import Query, APIRouter, UploadFile
 from typing import Annotated, Union
+
+from pydantic import BaseModel
+
 from app.database import session
 from app.mlmodel.mainmodel import predict_for_user
 from app.models import Items, Points, Prediction, UserInfo
@@ -62,12 +65,17 @@ async def create_market_upload_file(file: Union[UploadFile, None] = None):
         return {'status': 200, 'result': result}
 
 
+class Item(BaseModel):
+    device: int
+    items: list
+
+
 @router.post("/online/market/calculate")
-async def calculate(device: int, items: list):
+async def calculate(item: Item):
     """Здесь будет получение косметики."""
     try:
         # затычка
-        csvdata = {'user_id': 1, 'device_id': device, 'items_id': items}
+        csvdata = {'user_id': 1, 'device_id': item.device, 'items_id': item.items}
 
         # csvdata = pd.read_csv('filename.csv', sep=';')
         prediction = predict_for_user(user_id=csvdata['user_id'],
