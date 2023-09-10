@@ -36,7 +36,7 @@ async def get_market(user_id):
         productsWithNames = (
             session
             .query(Items)
-            .filter(Items.item_id in products)
+            .filter(Items.item_id.in_(products))
             .limit(10)
         ).all()
 
