@@ -2,6 +2,7 @@ from fastapi import Query, APIRouter, UploadFile
 from typing import Annotated, Union
 
 from pydantic import BaseModel
+from sqlalchemy import or_
 
 from app.database import session
 from app.mlmodel.mainmodel import predict_for_user
@@ -26,9 +27,8 @@ async def get_market(user_id):
 
         products = (
             session
-            .query(Prediction.item_id)
-            .filter(UserInfo.user_id == prediction_query.first())
-            .limit(10)
+            .query(UserInfo.item_id)
+            .filter(UserInfo.user_id == user_id)
         ).all()
 
         products.append(product)
