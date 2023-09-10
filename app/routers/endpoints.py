@@ -38,7 +38,7 @@ async def get_market(user_id):
             productsWithNames.append(
                 session
                 .query(Items)
-                .filter(Items.item_id == p.cast(Integer))
+                .filter(Items.item_id == p.item_id.cast(Integer))
                 .first())
 
         return {'status': 200, 'result': {
