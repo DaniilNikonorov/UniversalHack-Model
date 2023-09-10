@@ -2,52 +2,45 @@ from fastapi import Query, APIRouter, UploadFile
 from typing import Annotated, Union
 from app.database import session
 from app.mlmodel.mainmodel import predict_for_user
-from app.models import Cosmetic, Market, Items, Points
+from app.models import Items, Points, Prediction, UserInfo
 from app.mlmodel import mainmodel
 import pandas as pd
 
 router = APIRouter(prefix='/api/v1', tags=['our api'])
 
 
-@router.get("/offline/market/check/{check_id}")
-async def get_market(check_id):
+@router.get("/offline/market/check/{user_id}")
+async def get_market(user_id):
     """Здесь будет получение товаров."""
     try:
-        check_query = (
+        prediction_query = (
             session
-            .query(Market)
-            .filter(Market.item_id == check_id)
+            .query(Prediction.item_id)
+            .filter(Prediction.user_id == user_id)
         )
+        product = prediction_query.first()
 
-        return {'status': 200, 'result': check_query.all()}
+        products = (
+            session
+            .query(Prediction.item_id)
+            .filter(UserInfo.user_id == prediction_query.first())
+            .limit(10)
+        ).all()
+
+        products.append(product)
+
+        productsWithNames = (
+            session
+            .query(Items)
+            .filter(Items.c.item_id.in_([products]))
+            .limit(10)
+        ).all()
+
+        return {'status': 200, 'result': {
+            'user': user_id, 'predict': product, 'products': productsWithNames
+        }}
     except Exception as e:
         return {'status': 500, 'error': str(e)}
-
-
-@router.get("/offline/market/check/{check_id}")
-async def get_cosmetic(check_id):
-    """Здесь будет получение товаров."""
-    try:
-        check_query = (
-            session
-            .query(Market)
-            .filter(Market.item_id == check_id)
-        )
-
-        return {'status': 200, 'result': check_query.all()}
-    except Exception as e:
-        return {'status': 500, 'error': str(e)}
-
-
-@router.post("/offline/cosmetic/upload-file")
-async def create_cosmetic_upload_file(file: Union[UploadFile, None] = None):
-    if not file:
-        return {"message": "No upload file sent"}
-    else:
-        frame = pd.read_csv(file.file)
-
-        """Сюда добавить передачу данных в модель на дообучение"""
-        return {"filename": frame['check_id']}
 
 
 @router.post("/offline/market/upload-file")
@@ -56,9 +49,12 @@ async def create_market_upload_file(file: Union[UploadFile, None] = None):
         return {"message": "No upload file sent"}
     else:
         frame = pd.read_csv(file.file)
+        result = []
+        for d in frame['device_id']:
+            result.append(get_market(d))
 
         """Сюда добавить передачу данных в модель на дообучение"""
-        return {"filename": frame['check_id']}
+        return {'status': 200, 'result': result}
 
 
 @router.post("/online/market/calculate")
