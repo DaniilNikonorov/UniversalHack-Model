@@ -20,7 +20,7 @@ async def get_market(user_id):
     try:
         prediction_query = (
             session
-            .query(Prediction.item_id)
+            .query(Prediction)
             .filter(Prediction.user_id == user_id)
         )
         product = prediction_query.first()
