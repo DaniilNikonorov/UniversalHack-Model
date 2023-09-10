@@ -2,7 +2,7 @@ from fastapi import Query, APIRouter, UploadFile
 from typing import Annotated, Union
 
 from pydantic import BaseModel
-from sqlalchemy import or_
+from sqlalchemy import or_, Integer
 
 from app.database import session
 from app.mlmodel.mainmodel import predict_for_user
@@ -38,7 +38,7 @@ async def get_market(user_id):
             productsWithNames.append(
                 session
                 .query(Items)
-                .filter(Items.item_id == int(p))
+                .filter(Items.item_id == p.cast(Integer))
                 .first())
 
         return {'status': 200, 'result': {
