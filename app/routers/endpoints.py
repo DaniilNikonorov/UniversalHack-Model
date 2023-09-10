@@ -44,7 +44,7 @@ async def get_market(user_id):
         return {'status': 200, 'result': {
             'user': user_id,
             'predict': product,
-            'products': map(lambda n: {'name': n.name, 'item_id': n.item_id}, productsWithNames)
+            'products': productsWithNames
         }}
     except Exception as e:
         print(e)
