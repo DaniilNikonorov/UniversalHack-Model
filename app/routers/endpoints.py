@@ -33,15 +33,18 @@ async def get_market(user_id):
 
         products.append(product)
 
-        productsWithNames = (
-            session
-            .query(Items)
-            .filter(Items.item_id.in_(products))
-            .limit(10)
-        ).all()
+        productsWithNames = []
+        for p in products:
+            productsWithNames.append(
+                session
+                .query(Items)
+                .filter(Items.item_id == p)
+                .first())
 
         return {'status': 200, 'result': {
-            'user': user_id, 'predict': product, 'products': productsWithNames
+            'user': user_id,
+            'predict': product,
+            'products': productsWithNames
         }}
     except Exception as e:
         print(e)
