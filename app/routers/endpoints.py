@@ -73,8 +73,13 @@ async def calculate(device: int, items: list):
                                       device_id=csvdata['device_id'],
                                       sequence=csvdata['items_id']
                                       )
+        check_query = (
+            session
+            .query(Items)
+            .filter(Items.item_id == prediction)
+        )
 
-        return {'status': 200, 'result': await get_product(prediction)}
+        return {'status': 200, 'result': check_query.first()}
     except Exception as e:
         return {'status': 500, 'error': str(e)}
 
