@@ -35,7 +35,7 @@ async def get_market(user_id):
         productsWithNames = (
             session
             .query(Items)
-            .filter(Items.c.item_id.in_([products]))
+            .filter(Items.item_id in products)
             .limit(10)
         ).all()
 
@@ -84,13 +84,20 @@ async def calculate(item: Item):
                                       device_id=csvdata['device_id'],
                                       sequence=csvdata['items_id']
                                       )
+        print('Получилось предскзаать!')
+        print(prediction)
         check_query = (
             session
             .query(Items)
             .filter(Items.item_id == prediction)
         )
+        result = check_query.first()
 
-        return {'status': 200, 'result': check_query.first()}
+        return {'status': 200, 'result': {
+            'user': '52644800',
+            'product': result.name,
+            'products': item.items
+        }}
     except Exception as e:
         print(e)
         return {'status': 500, 'error': str(e)}
