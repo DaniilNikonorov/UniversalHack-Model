@@ -38,13 +38,13 @@ async def get_market(user_id):
             productsWithNames.append(
                 session
                 .query(Items)
-                .filter(Items.item_id == p)
+                .filter(Items.item_id == int(p))
                 .first())
 
         return {'status': 200, 'result': {
             'user': user_id,
             'predict': product,
-            'products': productsWithNames
+            'products': map(lambda n: {'name': n.name, 'item_id': n.item_id}, productsWithNames)
         }}
     except Exception as e:
         print(e)
