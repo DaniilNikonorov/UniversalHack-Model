@@ -23,8 +23,8 @@ class UserInfo(Base):
     __tablename__ = 'val_dataset'
 
     Column1 = Column('Column1', Integer, primary_key=True)
+    user_id = Column('user_id', Integer)
     device_id = Column('device_id', Integer)
-    receipt_id = Column('receipt_id', Integer)
     item_id = Column('item_id', Integer)
     server_date = Column('server_date', String)
     local_date = Column('local_date', String)
