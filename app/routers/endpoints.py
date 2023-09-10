@@ -48,17 +48,21 @@ async def create_market_upload_file(file: Union[UploadFile, None] = None):
     if not file:
         return {"message": "No upload file sent"}
     else:
-        frame = pd.read_csv(file.file)
-        result = []
-        for d in frame['device_id']:
-            result.append(get_market(d))
+        try:
+            frame = pd.read_csv(file.file)
+            result = []
+            for d in frame['device_id']:
+                result.append(get_market(d))
+
+        except Exception as e:
+            return {'status': 500, 'error': str(e)}
 
         """Сюда добавить передачу данных в модель на дообучение"""
         return {'status': 200, 'result': result}
 
 
 @router.post("/online/market/calculate")
-async def get_cosmetic(device, items):
+async def calculate(device: int, items: list):
     """Здесь будет получение косметики."""
     try:
         # затычка
